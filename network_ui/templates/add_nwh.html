@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="POST">
+    {{form.hidden_tag()}}
+    {{form.name.label}}{{form.name()}}<br>
+    {{form.bandwidth_rest_upload.label}}{{form.bandwidth_rest_upload()}}<br>
+    {{form.bandwidth_rest_download.label}}{{form.bandwidth_rest_download()}}<br>
+    {{form.dns_latency.label}}{{form.dns_latency()}}<br>
+    {{form.general_latency.label}}{{form.general_latency()}}<br>
+    {{form.packet_loss.label}}{{form.packet_loss()}}<br>
+    {{form.submit()}}
+</form>
+
+{% endblock content %}

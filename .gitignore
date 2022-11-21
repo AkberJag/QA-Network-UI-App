@@ -248,7 +248,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 
 ### VisualStudioCode ###
-.vscode/*
+.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -265,3 +265,4 @@ cython_debug/
 # Ignore all local history of files
 .history
 .ionide
+db.sqlite
