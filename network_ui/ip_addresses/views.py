@@ -29,3 +29,19 @@ def add():
             # TODO: send a flash to the user and dont save the IP
         return redirect(url_for("index"))
     return render_template("add_ip_address.html")
+
+
+@ip_address_blueprint.route("/delete", methods=["GET", "POST"])
+def delete():
+    form = DeleteForm()
+
+    if form.validate_on_submit():
+        id = form.id.data
+
+        ip_address = IPAddress.query.get(id)
+
+        db.session.delete(ip_address)
+        db.session.commit()
+
+        return redirect(url_for("index"))
+    return render_template("delete_ip_address.html", form=form)
