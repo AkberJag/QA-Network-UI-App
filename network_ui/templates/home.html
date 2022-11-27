@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if ip_addresses %}
+
+<form method="POST">
+
+    <h2>List of configured PCs</h2>
+
+    {% for ip in ip_addresses %}
+
+    {{ip}}
+
+    <a href="{{ url_for('ipaddresses.delete', id=ip.id) }}"><i>delete</i></a>
+
+    {% endfor %}
+
+    {% else %}
+    <h2>No PCs configured yet</h2>
+
+    {% endif %}
+</form>
+
+{% endblock content %}

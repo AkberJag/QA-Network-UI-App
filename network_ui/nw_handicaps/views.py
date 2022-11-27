@@ -22,5 +22,5 @@ def add():
         db.session.add(new_nw_handicap)
         db.session.commit()
 
-        return redirect(url_for("nw_handicaps.list"))
+        return redirect(url_for("index"))
     return render_template("add_nw_handicap.html", form=form)
