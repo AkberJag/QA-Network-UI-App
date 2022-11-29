@@ -1,18 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% for message in get_flashed_messages()%}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>{{message}}</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
 
 {% if ip_addresses %}
 
 <form method="POST">
 
     <h2>List of configured PCs</h2>
-
     {% for ip in ip_addresses %}
+    <div class="card">
+        {{ip}}
+    </div>
 
-    {{ip}}
-
-    <a href="{{ url_for('ipaddresses.delete', id=ip.id) }}"><i>delete</i></a>
+    <a href="{{ url_for('ipaddresses.delete', id=ip.id) }}" type="button" class="btn btn-danger">delete</a>
+    <br><br>
 
     {% endfor %}
 
