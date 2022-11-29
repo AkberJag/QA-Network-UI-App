@@ -43,14 +43,17 @@ def add():
             # run the script with subprocess and if it is succesful, add the details to DB
             is_a_scrip_running = True
 
-            script_call = subprocess.call(
-                [
-                    "bash",
-                    "network_ui/shell_scripts/temp.sh",
-                    str(ip_address),
-                    str(network_handicap),
-                ]
-            )
+            # commenting to test this on windows
+            # script_call = subprocess.call(
+            #     [
+            #         "bash",
+            #         "network_ui/shell_scripts/temp.sh",
+            #         str(ip_address),
+            #         str(network_handicap),
+            #     ]
+            # )
+
+            script_call = 0
 
             if str(script_call) == "0":
                 is_a_scrip_running = False
