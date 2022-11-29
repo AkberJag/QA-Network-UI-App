@@ -1,4 +1,5 @@
 Install the requirements by running
+
 pip3 install requirements.txt
 
 Then make migrations by running the three commands:
