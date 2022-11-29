@@ -13,9 +13,9 @@
 <form method="POST">
 
     <h2>List of configured PCs</h2>
-    {% for ip, i in ip_addresses.items() %}
+    {% for ip in ip_addresses %}
     <div class="card">
-        {{ip}} {{i[1]['test']}}
+        {{ip}}
     </div>
 
     <a href="{{ url_for('ipaddresses.delete', id=ip.id) }}" type="button" class="btn btn-danger">delete</a>
