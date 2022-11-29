@@ -1,10 +1,13 @@
 Install the requirements by running
 
+```
 pip3 install requirements.txt
+```
 
 Then make migrations by running the three commands:
+```
 flask db init
 flask db migrate -m "Initial migration."
 flask db upgrade
-
-For more info see https://flask-migrate.readthedocs.io/en/latest/
+```
+For more info about flask migrate, see https://flask-migrate.readthedocs.io/en/latest/
