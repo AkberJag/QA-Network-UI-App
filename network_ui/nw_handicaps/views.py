@@ -16,8 +16,24 @@ def add():
     if form.validate_on_submit():
         handicap_name = form.nw_handicap_name.data
         ip_address_id = form.ip_address_id.data
+        bandwidth_restriction_upload = form.bandwidth_restriction_upload.data
+        bandwidth_restriction_download = form.bandwidth_restriction_download.data
 
-        new_nw_handicap = NetworkHandicap(handicap_name, ip_address_id)
+        dns_latency = form.dns_latency.data
+        general_latency = form.general_latency.data
+
+        packet_loss = form.packet_loss.data
+        # TODO: Add logic to limit the value between 0 - 100
+
+        new_nw_handicap = NetworkHandicap(
+            handicap_name,
+            ip_address_id,
+            bandwidth_restriction_upload,
+            bandwidth_restriction_download,
+            dns_latency,
+            general_latency,
+            packet_loss,
+        )
 
         db.session.add(new_nw_handicap)
         db.session.commit()

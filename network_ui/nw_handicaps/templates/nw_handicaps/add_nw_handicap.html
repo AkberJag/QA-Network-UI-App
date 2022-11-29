@@ -13,8 +13,27 @@
     <h2>Add a network handicap</h2>
     <form method="POST">
         {{form.hidden_tag()}}
+
         {{form.nw_handicap_name.label(class="form-label")}}<br>
         {{form.nw_handicap_name(class="form-control")}}<br>
+
+        {{form.bandwidth_restriction_upload.label(class="form-label")}}<br>
+        {{form.bandwidth_restriction_upload(class="form-control")}}<br>
+
+        {{form.bandwidth_restriction_download.label(class="form-label")}}<br>
+        {{form.bandwidth_restriction_download(class="form-control")}}<br>
+
+        {{form.dns_latency.label(class="form-label")}}<br>
+        {{form.dns_latency(class="form-control")}}<br>
+
+        {{form.general_latency.label(class="form-label")}}<br>
+        {{form.general_latency(class="form-control")}}<br>
+
+        {{form.packet_loss.label(class="form-label")}}<br>
+        {{form.packet_loss(class="form-control")}}<br>
+
+
+
         {{form.submit(class="btn btn-primary")}}
     </form>
 </div>
