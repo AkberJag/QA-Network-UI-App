@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{# Flash Messages #}
 {% for message in get_flashed_messages()%}
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
     <strong>{{message}}</strong>
@@ -8,23 +10,48 @@
 </div>
 {% endfor %}
 
-{% if ip_addresses %}
+
+{% if templates %}
 
 <form method="POST">
 
-    <h2>List of configured PCs</h2>
-    {% for ip in ip_addresses %}
+    <h2><em>List of configured PCs</em></h2><br>
+    {% for template, template_items in templates.items() %}
     <div class="card">
-        {{ip}}
-    </div>
-
-    <a href="{{ url_for('ipaddresses.delete', id=ip.id) }}" type="button" class="btn btn-danger">delete</a>
-    <br><br>
-
-    {% endfor %}
-
-    {% else %}
-    <h2>No PCs configured yet</h2>
+        <div class="card-body">
+            <div class="card-header">
+                {# template name #}
+                <h2 style="display: inline-block" data-bs-container="body" data-bs-trigger="hover"
+                    data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="Bandwidth Upload: {{template_items['template'].bandwidth_restriction_upload}} /
+                    Download: {{template_items['template'].bandwidth_restriction_download}}">
+                    {{template}}
+                </h2>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">PC Name</th>
+                        <th scope="col">IP Address</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for template_item in template_items['pc'] %}
+                    <tr>
+                        {# {{loop.index}} is something like enumerate in python #}
+                        <th scope="row">{{loop.index}}</th>
+                        <td>{{template_item[0].pc_name}}</td>
+                        <td>{{template_item[0].ip_address}}</td>
+                        <td><a href="{{ url_for('ipaddresses.delete', id=template_item[1].id) }}" type="button"
+                                class="btn btn-outline-danger">delete</a><br></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div><br><br>
+    {% endfor %} {% else %} <h2>No PCs configured yet</h2>
 
     {% endif %}
 </form>
