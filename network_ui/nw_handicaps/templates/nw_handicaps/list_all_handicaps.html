@@ -31,8 +31,8 @@
                     <td>{{nw_handicap.general_latency}}</td>
                     <td>{{nw_handicap.packet_loss}}</td>
                     <td>{{nw_handicap.no_of_pcs}}</td>
-                    {# <td><a href="{{ url_for('ipaddresses.delete', id=template_item[1].id) }}" type="button"
-                            class="btn btn-outline-danger">delete</a><br></td> #}
+                    <td><a href="{{ url_for('nw_handi.delete', id=nw_handicap.id) }}" type="button"
+                            class="btn btn-outline-danger">delete</a><br></td>
                 </tr>
 
                 {% endfor%}

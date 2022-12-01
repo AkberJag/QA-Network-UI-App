@@ -7,8 +7,8 @@ class IPAddress(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    pc_name = db.Column(db.Text)
-    ip_address = db.Column(db.Text)
+    pc_name = db.Column(db.Text, unique=True)
+    ip_address = db.Column(db.Text, unique=True)
 
     network_handicap = db.Column(db.Integer, db.ForeignKey("networkhandicaps.id"))
 

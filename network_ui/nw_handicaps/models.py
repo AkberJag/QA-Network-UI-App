@@ -6,7 +6,7 @@ class NetworkHandicap(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    handicap_name = db.Column(db.Text)  # Eg: good network
+    handicap_name = db.Column(db.Text, unique=True)  # Eg: good network
 
     bandwidth_restriction_upload = db.Column(db.Float)
     bandwidth_restriction_download = db.Column(db.Float)
@@ -19,8 +19,13 @@ class NetworkHandicap(db.Model):
     # Question: is this a better way or joining 2 tables and counting is better?
     no_of_pcs = db.Column(db.Integer, default=0)
 
+    # https://docs.sqlalchemy.org/en/14/orm/cascades.html
+    # cascade will auto delete the child when the parent is deleted
     ip_address_id = db.relationship(
-        "IPAddress", backref="networkhandicaps", uselist=False
+        "IPAddress",
+        backref="networkhandicaps",
+        cascade="all, delete-orphan",
+        uselist=False,
     )
 
     def __init__(

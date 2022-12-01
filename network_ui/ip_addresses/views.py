@@ -4,6 +4,7 @@ from network_ui.ip_addresses.models import IPAddress
 from network_ui.ip_addresses.forms import AddForm, DeleteForm
 from network_ui.nw_handicaps.models import NetworkHandicap
 from flask import Blueprint, render_template, url_for, redirect, flash
+from markupsafe import Markup
 
 ip_address_blueprint = Blueprint(
     "ipaddresses", __name__, template_folder="templates/ip_addresses/"
@@ -34,6 +35,15 @@ def add():
         pc_name = form.pc_name.data
         ip_address = form.ip_address.data
         network_handicap = form.network_handicap.data
+
+        # check the PC name is already existing on DB
+        if IPAddress.query.filter_by(pc_name=pc_name).first() != None:
+            flash(Markup(f"This PC name <b>{pc_name}</b> is already in use"))
+            return redirect(url_for("ipaddresses.add"))
+        # check the IP Address is already existing on DB
+        if IPAddress.query.filter_by(ip_address=ip_address).first() != None:
+            flash(Markup(f"This IP address <b>{ip_address}</b> is already in use"))
+            return redirect(url_for("ipaddresses.add"))
 
         # validate the ip addess with re
         # https://www.geeksforgeeks.org/python-program-to-validate-an-ip-address/
