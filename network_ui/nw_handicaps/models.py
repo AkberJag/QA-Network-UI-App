@@ -16,11 +16,12 @@ class NetworkHandicap(db.Model):
     packet_loss = db.Column(db.Float)
 
     # this is to hold the total number of pcs configured for a template
-    # Question: is this a better way or joining 2 tables and counting is better?
+    # ? Question: is this a better way or joining 2 tables and counting is better?
     no_of_pcs = db.Column(db.Integer, default=0)
 
     # https://docs.sqlalchemy.org/en/14/orm/cascades.html
     # cascade will auto delete the child when the parent is deleted
+    # ! but this is only releting one child investigate more on this
     ip_address_id = db.relationship(
         "IPAddress",
         backref="networkhandicaps",
