@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for nw_handicap in nw_handicaps %}
+
+{{nw_handicap.handicap_name}}<br>
+
+{% endfor %}
+
+{% endblock content %}

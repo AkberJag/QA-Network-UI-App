@@ -40,3 +40,21 @@ def add():
 
         return redirect(url_for("index"))
     return render_template("add_nw_handicap.html", form=form)
+
+
+@nw_handicap_blueprint.route("/list", methods=["GET", "POST"])
+def list():
+    nw_handicaps = NetworkHandicap.query.all()
+    return render_template("list_all_handicaps.html", nw_handicaps=nw_handicaps)
+
+
+@nw_handicap_blueprint.route("/delete/<int:id>", methods=["GET", "POST"])
+def delete():
+    ip_address = NetworkHandicap.query.get(id)
+    if ip_address:
+        db.session.delete(ip_address)
+        db.session.commit()
+
+        # TODO: Add a script call to remove this IP address from the restriction
+        # TODO: along with the template deletion, delete all the IP address configured with the template
+    return redirect(url_for("index"))

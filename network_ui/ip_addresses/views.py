@@ -75,11 +75,13 @@ def add():
     return render_template("add_ip_address.html", form=form)
 
 
-@ip_address_blueprint.route("/delete/<id>", methods=["GET", "POST"])
+@ip_address_blueprint.route("/delete/<int:id>", methods=["GET", "POST"])
 def delete(id):
     ip_address = IPAddress.query.get(id)
     if ip_address:
         db.session.delete(ip_address)
         db.session.commit()
+
+        # TODO: Add a script call to remove this IP address from the restriction
 
     return redirect(url_for("index"))
