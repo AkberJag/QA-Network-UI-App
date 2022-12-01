@@ -15,6 +15,10 @@ class NetworkHandicap(db.Model):
     general_latency = db.Column(db.Float)
     packet_loss = db.Column(db.Float)
 
+    # this is to hold the total number of pcs configured for a template
+    # Question: is this a better way or joining 2 tables and counting is better?
+    no_of_pcs = db.Column(db.Integer, default=0)
+
     ip_address_id = db.relationship(
         "IPAddress", backref="networkhandicaps", uselist=False
     )

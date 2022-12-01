@@ -45,6 +45,7 @@ def add():
 @nw_handicap_blueprint.route("/list", methods=["GET", "POST"])
 def list():
     nw_handicaps = NetworkHandicap.query.all()
+
     return render_template("list_all_handicaps.html", nw_handicaps=nw_handicaps)
 
 

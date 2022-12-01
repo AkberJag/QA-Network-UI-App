@@ -2,10 +2,47 @@
 
 {% block content %}
 
-{% for nw_handicap in nw_handicaps %}
 
-{{nw_handicap.handicap_name}}<br>
+<div class="card">
+    <div class="card-body">
+        {% if nw_handicaps %}
 
-{% endfor %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Handicap Name</th>
+                    <th scope="col">Bandwidth restriction (max upload, max download)</th>
+                    <th scope="col">DNS Latency</th>
+                    <th scope="col">General Latency</th>
+                    <th scope="col">Packet Loss %</th>
+                    <th scope="col">Number of PCs</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for nw_handicap in nw_handicaps %}
+                <tr>
+                    <th scope="row">{{loop.index}}</th>
+                    <td>{{nw_handicap.handicap_name}}</td>
+                    <td>{{nw_handicap.bandwidth_restriction_upload}}Mb, {{nw_handicap.bandwidth_restriction_download}}Mb
+                    </td>
+                    <td>{{nw_handicap.dns_latency}}</td>
+                    <td>{{nw_handicap.general_latency}}</td>
+                    <td>{{nw_handicap.packet_loss}}</td>
+                    <td>{{nw_handicap.no_of_pcs}}</td>
+                    {# <td><a href="{{ url_for('ipaddresses.delete', id=template_item[1].id) }}" type="button"
+                            class="btn btn-outline-danger">delete</a><br></td> #}
+                </tr>
+
+                {% endfor%}
+
+            </tbody>
+        </table>
+        {% else %}
+        <h2>No Network Handicaps added yet</h2>
+        {% endif %}
+    </div>
+</div>
 
 {% endblock content %}

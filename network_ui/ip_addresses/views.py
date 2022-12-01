@@ -58,6 +58,12 @@ def add():
             if str(script_call) == "0":
                 is_a_scrip_running = False
 
+            # Increment the total number PCs configured in this template by 1
+            # Please see the question on nw_handicaps > models.py
+            NetworkHandicap.query.get(int(network_handicap)).no_of_pcs = (
+                NetworkHandicap.query.get(int(network_handicap)).no_of_pcs + 1
+            )
+
             new_ip_address = IPAddress(pc_name, ip_address, network_handicap)
             db.session.add(new_ip_address)
             db.session.commit()
@@ -79,6 +85,13 @@ def add():
 def delete(id):
     ip_address = IPAddress.query.get(id)
     if ip_address:
+
+        # Decrement the total number PCs configured in this template by 1
+        # Please see the question on nw_handicaps > models.py
+        NetworkHandicap.query.get(int(ip_address.network_handicap)).no_of_pcs = (
+            NetworkHandicap.query.get(int(ip_address.network_handicap)).no_of_pcs - 1
+        )
+
         db.session.delete(ip_address)
         db.session.commit()
 

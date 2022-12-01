@@ -11,7 +11,7 @@ def index():
 
     templates = {}
     for template in all_templates:
-        templates[template.handicap_name] = {
+        templates[template.id] = {
             "pc": (
                 db.session.query(IPAddress, NetworkHandicap)
                 .select_from(IPAddress)
@@ -21,7 +21,6 @@ def index():
             ),
             "template": template,
         }
-        print(template.bandwidth_restriction_upload)
     return render_template("home.html", templates=templates)
 
 
