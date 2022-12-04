@@ -33,7 +33,6 @@ def add():
 
         new_nw_handicap = NetworkHandicap(
             handicap_name,
-            ip_address_id,
             bandwidth_restriction_upload,
             bandwidth_restriction_download,
             dns_latency,

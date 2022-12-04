@@ -21,18 +21,16 @@ class NetworkHandicap(db.Model):
 
     # https://docs.sqlalchemy.org/en/14/orm/cascades.html
     # cascade will auto delete the child when the parent is deleted
-    # ! but this is only releting one child investigate more on this
     ip_address_id = db.relationship(
         "IPAddress",
         backref="networkhandicaps",
         cascade="all, delete-orphan",
-        uselist=False,
+        lazy="dynamic",
     )
 
     def __init__(
         self,
         handicap_name,
-        ip_address_id,
         bandwidth_restriction_upload,
         bandwidth_restriction_download,
         dns_latency,
@@ -40,7 +38,6 @@ class NetworkHandicap(db.Model):
         packet_loss,
     ):
         self.handicap_name = handicap_name
-        self.ip_address_id = ip_address_id
         self.bandwidth_restriction_upload = bandwidth_restriction_upload
         self.bandwidth_restriction_download = bandwidth_restriction_download
         self.dns_latency = dns_latency
