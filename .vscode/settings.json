@@ -14,5 +14,6 @@
     "terminal.integrated.defaultProfile.windows": "PowerShell",
     "files.associations": {
         "*.html": "jinja-html"
-    }
+    },
+    "python.linting.enabled": false
 }
