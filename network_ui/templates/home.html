@@ -1,14 +1,14 @@
-<script>
-    const getRandomEmoji = () => {
-        const emojis = ['🐵', '🐒', '🦍', '🦧', '🐔', '🐓', '🐣', '🐤', '🐌', '🦋', '🐛', '🐜', '🐝', '🍇', '🍆', '🐞', '🦗', '🕷']
-        return emojis[~~(Math.random() * emojis.length)]
-    } 
-</script>
-
 {% extends "base.html" %}
 
 
 {% block content %}
+
+<script>
+    const getRandomEmoji = () => {
+        const emojis = ['🐵', '🐒', '🦍', '🦧', '🐔', '🐓', '🐣', '🐤', '🐌', '🦋', '🐛', '🐜', '🐝', '🍇', '🍆', '🐞', '🦗', '🕷']
+        return emojis[~~(Math.random() * emojis.length)]
+    }
+</script>
 
 {# Flash Messages #}
 {% for message in get_flashed_messages()%}
@@ -35,10 +35,8 @@
                     <b>General Latency: </b> {{template_items['template'].general_latency}}<br>
                     <b>Packet Loss: </b>{{template_items['template'].packet_loss}}%">
                     {{template_items['template'].handicap_name}}<sup id="emoji"
-                        style="vertical-align: super; font-size: small">
-                        <script> document.getElementById("emoji").innerHTML = getRandomEmoji()</script>
-                    </sup>
-                </h2>
+                        style="vertical-align: super; font-size: small"></sup></h2>
+                <script> document.getElementById("emoji").innerHTML = getRandomEmoji()</script>
             </div>
             <table class="table table-bordered">
                 <thead>
@@ -57,9 +55,7 @@
                         <td>{{template_item[0].pc_name}}</td>
                         <td>{{template_item[0].ip_address}}</td>
                         <td><button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                data-bs-target="#deleteIPConfirm">
-                                Delete
-                            </button>
+                                data-bs-target="#deleteIPConfirm">Delete</button>
                             <!-- Modal -->
                             <div class="modal fade" id="deleteIPConfirm" tabindex="-1"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -97,7 +93,8 @@
                                 </div>
                             </div>
                         </td>
-                        {# button without confirmation #}
+
+                        {# old button without delete confirmation #}
                         {# <td><a href="{{ url_for('ipaddresses.delete', id=template_item[0].id) }}" type="button"
                                 class="btn btn-outline-danger">delete</a><br></td> #}
                     </tr>
@@ -113,4 +110,5 @@
     {% endif %}
 </div>
 </form>
+
 {% endblock content %}
