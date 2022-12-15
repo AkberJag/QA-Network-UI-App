@@ -28,7 +28,10 @@ def add():
 
         # check the Handicap name is already existing on DB
         if NetworkHandicap.query.filter_by(handicap_name=handicap_name).first() != None:
-            flash(Markup(f"This Markup name <b>{handicap_name}</b> is already in use"))
+            flash(
+                Markup(f"This handicap name <b>{handicap_name}</b> is already in use"),
+                "danger",
+            )
             return redirect(url_for("nw_handi.add"))
 
         new_nw_handicap = NetworkHandicap(

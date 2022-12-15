@@ -27,7 +27,7 @@ def add():
 
     # if a script is running already take the user to the homescreen and show a flash
     if is_a_scrip_running:
-        flash("a script is running please wait before adding a new one")
+        flash("a script is running please wait before adding a new one", "danger")
         return redirect(url_for("index"))
 
     if form.validate_on_submit():
@@ -38,11 +38,17 @@ def add():
 
         # check the PC name is already existing on DB
         if IPAddress.query.filter_by(pc_name=pc_name).first() != None:
-            flash(Markup(f"This PC name <b>{pc_name}</b> is already in use"))
+            flash(
+                Markup(f"This PC name <b>{pc_name}</b> is already in use"),
+                "danger",
+            )
             return redirect(url_for("ipaddresses.add"))
         # check the IP Address is already existing on DB
         if IPAddress.query.filter_by(ip_address=ip_address).first() != None:
-            flash(Markup(f"This IP address <b>{ip_address}</b> is already in use"))
+            flash(
+                Markup(f"This IP address <b>{ip_address}</b> is already in use"),
+                "danger",
+            )
             return redirect(url_for("ipaddresses.add"))
 
         # validate the ip addess with re
@@ -78,14 +84,15 @@ def add():
             db.session.add(new_ip_address)
             db.session.commit()
 
+            flash(Markup(f"IP address added successfully"), "success")
             return redirect(url_for("index"))
         else:
             # TODO: send a flash to the user and dont save the IP
-            flash(f"{ip_address} is not a valid IP address")
+            flash(Markup(f"{ip_address} is not a valid IP address"), "danger")
 
     # if the network handicap is empty, ask the user to add one first before adding an ip
     if NetworkHandicap.query.all() == []:
-        flash("Add a Network Profile first to add an ip address")
+        flash("Add a Network Profile first to add an ip address", "warning")
         return redirect(url_for("nw_handi.add"))
 
     return render_template("add_ip_address.html", form=form)
