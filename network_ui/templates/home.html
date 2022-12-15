@@ -34,9 +34,9 @@
                     <b>DNS Latency:</b> {{template_items['template'].dns_latency}}<br>
                     <b>General Latency: </b> {{template_items['template'].general_latency}}<br>
                     <b>Packet Loss: </b>{{template_items['template'].packet_loss}}%">
-                    {{template_items['template'].handicap_name}}<sup id="emoji"
+                    {{template_items['template'].handicap_name}}<sup id="emoji-{{loop.index}}"
                         style="vertical-align: super; font-size: small"></sup></h2>
-                <script> document.getElementById("emoji").innerHTML = getRandomEmoji()</script>
+                <script> document.getElementById("emoji-{{loop.index}}").innerHTML = getRandomEmoji()</script>
             </div>
             <table class="table table-bordered">
                 <thead>
