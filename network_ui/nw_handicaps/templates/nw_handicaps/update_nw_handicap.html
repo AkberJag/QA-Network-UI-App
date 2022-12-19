@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="col">
+    <h2>Update "<b>{{handicap_to_update.handicap_name}}</b>"</h2><br>
+    <form method="POST">
+        {{form.hidden_tag()}}
+
+        {{form.nw_handicap_name.label(class="form-label")}}<br>
+        {{form.nw_handicap_name(class="form-control", value = handicap_to_update.handicap_name )}}<br>
+
+        {{form.bandwidth_restriction_upload.label(class="form-label")}}<br>
+        {{form.bandwidth_restriction_upload(class="form-control",
+        value=handicap_to_update.bandwidth_restriction_upload)}}<br>
+
+        {{form.bandwidth_restriction_download.label(class="form-label")}}<br>
+        {{form.bandwidth_restriction_download(class="form-control",
+        value=handicap_to_update.bandwidth_restriction_download)}}<br>
+
+        {{form.dns_latency.label(class="form-label")}}<br>
+        {{form.dns_latency(class="form-control", value=handicap_to_update.dns_latency)}}<br>
+
+        {{form.general_latency.label(class="form-label")}}<br>
+        {{form.general_latency(class="form-control", value=handicap_to_update.general_latency)}}<br>
+
+        {{form.packet_loss.label(class="form-label")}}<br>
+        {{form.packet_loss(class="form-control", value=handicap_to_update.packet_loss)}}<br>
+
+
+
+        {{form.submit(class="btn btn-outline-primary", value="Update" )}}
+
+
+
+
+        <a class="btn btn-outline-secondary" href="{{ url_for('nw_handi.list')}}">Cancel</a>
+
+    </form>
+</div>
+
+{% endblock content %}

@@ -16,7 +16,6 @@ def add():
 
     if form.validate_on_submit():
         handicap_name = form.nw_handicap_name.data
-        ip_address_id = form.ip_address_id.data
         bandwidth_restriction_upload = form.bandwidth_restriction_upload.data
         bandwidth_restriction_download = form.bandwidth_restriction_download.data
 
@@ -66,4 +65,53 @@ def delete(id):
 
         # TODO: Add a script call to remove this IP address from the restriction
         # TODO: along with the template deletion, delete all the IP address configured with the template
-    return redirect(url_for("index"))
+    return redirect(url_for("nw_handi.list"))
+
+
+@nw_handicap_blueprint.route("/update/<int:id>", methods=["GET", "POST"])
+def update(id):
+    form = AddForm()
+
+    handicap_to_update = NetworkHandicap.query.get_or_404(id)
+    print(handicap_to_update)
+
+    if form.validate_on_submit():
+
+        updated_handicap_name = form.nw_handicap_name.data
+
+        # check the Handicap name is already existing on DB
+        if (
+            NetworkHandicap.query.filter_by(handicap_name=updated_handicap_name).first()
+            != None
+            and handicap_to_update.handicap_name != updated_handicap_name
+        ):
+            flash(
+                Markup(
+                    f"This handicap name <b>{form.nw_handicap_name.data}</b> is already in use"
+                ),
+                "danger",
+            )
+            return redirect(url_for("nw_handi.list"))
+
+        handicap_to_update.handicap_name = form.nw_handicap_name.data
+        handicap_to_update.bandwidth_restriction_upload = (
+            form.bandwidth_restriction_upload.data
+        )
+        handicap_to_update.bandwidth_restriction_download = (
+            form.bandwidth_restriction_download.data
+        )
+
+        handicap_to_update.dns_latency = form.dns_latency.data
+        handicap_to_update.general_latency = form.general_latency.data
+
+        handicap_to_update.packet_loss = form.packet_loss.data
+        # TODO: Add logic to limit the value between 0 - 100
+        db.session.commit()
+        flash(
+            Markup(f"<b>{handicap_to_update.handicap_name}</b> updated successfully"),
+            "success",
+        )
+        return redirect(url_for("nw_handi.list"))
+    return render_template(
+        "update_nw_handicap.html", form=form, handicap_to_update=handicap_to_update
+    )
