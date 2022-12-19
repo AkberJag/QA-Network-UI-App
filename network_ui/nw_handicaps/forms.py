@@ -1,10 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField, SubmitField, FloatField
+from wtforms.validators import InputRequired
 
 
 class AddForm(FlaskForm):
-    ip_address_id = IntegerField("Enter id of the ip address:")
-    nw_handicap_name = StringField("Name of handicap template:")
+    nw_handicap_name = StringField(
+        "Name of handicap template:", validators=[InputRequired()]
+    )
     bandwidth_restriction_upload = FloatField(
         "Enter Bandwidth restriction - max upload:"
     )

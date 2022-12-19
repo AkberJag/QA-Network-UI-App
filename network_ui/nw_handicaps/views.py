@@ -1,7 +1,7 @@
 from network_ui import db
 from network_ui.nw_handicaps.forms import AddForm
 from network_ui.nw_handicaps.models import NetworkHandicap
-from flask import Blueprint, render_template, url_for, redirect, flash
+from flask import Blueprint, render_template, url_for, redirect, flash, request
 from markupsafe import Markup
 
 
@@ -46,6 +46,11 @@ def add():
         db.session.commit()
 
         return redirect(url_for("index"))
+    if request.method == "POST":
+        flash(
+            "Enter value for at least one parameter to save the handicap template",
+            "danger",
+        )
     return render_template("add_nw_handicap.html", form=form)
 
 
