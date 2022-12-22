@@ -23,13 +23,17 @@
             <tbody>
                 {% for nw_handicap in nw_handicaps %}
                 <tr>
+
+                    {# if handicap_to_update.handicap_name is not None #}
                     <th scope="row">{{loop.index}}</th>
                     <td>{{nw_handicap.handicap_name}}</td>
-                    <td>{{nw_handicap.bandwidth_restriction_upload}}Mb, {{nw_handicap.bandwidth_restriction_download}}Mb
+                    <td>{{nw_handicap.bandwidth_restriction_upload ~ ' MB, ' if nw_handicap.bandwidth_restriction_upload
+                        is not none else '--,'}} {{nw_handicap.bandwidth_restriction_download ~ ' MB, ' if
+                        nw_handicap.bandwidth_restriction_download is not none else '--'}}
                     </td>
-                    <td>{{nw_handicap.dns_latency}}</td>
-                    <td>{{nw_handicap.general_latency}}</td>
-                    <td>{{nw_handicap.packet_loss}}</td>
+                    <td>{{nw_handicap.dns_latency if nw_handicap.dns_latency is not none else '--'}}</td>
+                    <td>{{nw_handicap.general_latency if nw_handicap.general_latency is not none else '--'}}</td>
+                    <td>{{nw_handicap.packet_loss if nw_handicap.packet_loss is not none else '--'}}</td>
                     <td>{{nw_handicap.no_of_pcs}}</td>
                     <td>
                         <div style="width: max-content;">
