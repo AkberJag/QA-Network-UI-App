@@ -3,19 +3,55 @@
 
 <h3>Add a new IP address</h3>
 
-<form method="POST">
+<form method="POST" novalidate class="needs-validation">
     {{form.hidden_tag()}}
 
     {{form.pc_name.label(class="form-label")}}<br>
-    {{form.pc_name(class="form-control")}}<br>
+    <div class="input-group has-validation">
+        {{form.pc_name(class="form-control", required="required")}}
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please enter a name for your device.</div>
+    </div>
+    <br>
 
     {{form.ip_address.label(class="form-label")}}<br>
-    {{form.ip_address(class="form-control")}}<br>
+    <div class="input-group has-validation">
+        {{form.ip_address(class="form-control", required="required")}}
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Stop QA'ing and enter a IP adderss</div>
+    </div>
+    <br>
 
     {{form.network_handicap.label(class="form-label")}}
     {{form.network_handicap(class="btn btn-secondary dropdown-toggle")}}<br>
 
     {{form.submit(class="btn btn-outline-primary")}}
 </form>
+
+
+
+
+<script>
+
+    // JavaScript for disabling form submissions if there are invalid fields
+    (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
 
 {% endblock content %}
