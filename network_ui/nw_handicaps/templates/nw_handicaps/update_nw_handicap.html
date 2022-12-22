@@ -4,39 +4,84 @@
 
 <div class="col">
     <h2>Update "<b>{{handicap_to_update.handicap_name}}</b>"</h2><br>
-    <form method="POST">
+    <form method="POST" novalidate class="needs-validation">
         {{form.hidden_tag()}}
 
         {{form.nw_handicap_name.label(class="form-label")}}<br>
-        {{form.nw_handicap_name(class="form-control", value = handicap_to_update.handicap_name )}}<br>
+        <div class="input-group has-validation">
+            {{form.nw_handicap_name(class="form-control", required="required", value = handicap_to_update.handicap_name
+            )}}<br>
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please enter a name for the network handicap.</div>
+        </div>
 
         {{form.bandwidth_restriction_upload.label(class="form-label")}}<br>
-        {{form.bandwidth_restriction_upload(class="form-control",
-        value=handicap_to_update.bandwidth_restriction_upload)}}<br>
+        <div class="input-group has-validation">
+            {{form.bandwidth_restriction_upload(class="form-control", type="number", min=0,
+            value=handicap_to_update.bandwidth_restriction_upload)}}
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Stop QA'ing and enter a NUMBER</div>
+        </div><br>
 
         {{form.bandwidth_restriction_download.label(class="form-label")}}<br>
-        {{form.bandwidth_restriction_download(class="form-control",
-        value=handicap_to_update.bandwidth_restriction_download)}}<br>
+        <div class="input-group has-validation">
+            {{form.bandwidth_restriction_download(class="form-control", type="number", min=0,
+            value=handicap_to_update.bandwidth_restriction_download)}}
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Stop QA'ing and enter a NUMBER</div>
+        </div><br>
 
         {{form.dns_latency.label(class="form-label")}}<br>
-        {{form.dns_latency(class="form-control", value=handicap_to_update.dns_latency)}}<br>
+        <div class="input-group has-validation">
+            {{form.dns_latency(class="form-control", type="number", min=0, value=handicap_to_update.dns_latency)}}
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Stop QA'ing and enter a NUMBER</div>
+        </div><br>
 
         {{form.general_latency.label(class="form-label")}}<br>
-        {{form.general_latency(class="form-control", value=handicap_to_update.general_latency)}}<br>
+        <div class="input-group has-validation">
+            {{form.general_latency(class="form-control", type="number", min=0,
+            value=handicap_to_update.general_latency)}}
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Stop QA'ing and enter a NUMBER</div>
+        </div><br>
 
         {{form.packet_loss.label(class="form-label")}}<br>
-        {{form.packet_loss(class="form-control", value=handicap_to_update.packet_loss)}}<br>
-
-
+        <div class="input-group has-validation">
+            {{form.packet_loss(class="form-control", type="number", min=0, max=100,
+            value=handicap_to_update.packet_loss)}}
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Stop QA'ing and enter a NUMBER</div>
+        </div><br>
 
         {{form.submit(class="btn btn-outline-primary", value="Update" )}}
-
-
-
 
         <a class="btn btn-outline-secondary" href="{{ url_for('nw_handi.list')}}">Cancel</a>
 
     </form>
 </div>
+
+<script>
+
+    // JavaScript for disabling form submissions if there are invalid fields
+    (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
 
 {% endblock content %}
