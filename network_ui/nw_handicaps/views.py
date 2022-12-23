@@ -23,6 +23,17 @@ def add():
         general_latency = form.general_latency.data
 
         packet_loss = form.packet_loss.data
+
+        if form.cidr_not.data and form.cidr_suffix.data:
+            cidr_notation = f"{form.cidr_not.data}/{form.cidr_suffix.data}"
+            print(cidr_notation)
+        elif form.cidr_not.data and not form.cidr_suffix.data:
+            cidr_notation = None
+            flash(
+                Markup(f"Add the suffix {form.cidr_not.data} / <b>----</b>"), "warning"
+            )
+
+            return redirect(url_for("nw_handi.add"))
         # TODO: Add logic to limit the value between 0 - 100
 
         # check the Handicap name is already existing on DB
@@ -40,6 +51,7 @@ def add():
             dns_latency,
             general_latency,
             packet_loss,
+            cidr_notation,
         )
 
         db.session.add(new_nw_handicap)

@@ -6,6 +6,8 @@ class NetworkHandicap(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
+    cidr_not = db.Column(db.Text)  # Eg: 192.168.1.1/23
+
     handicap_name = db.Column(db.Text, unique=True)  # Eg: good network
 
     bandwidth_restriction_upload = db.Column(db.Float)
@@ -36,6 +38,7 @@ class NetworkHandicap(db.Model):
         dns_latency,
         general_latency,
         packet_loss,
+        cidr_not,
     ):
         self.handicap_name = handicap_name
         self.bandwidth_restriction_upload = bandwidth_restriction_upload
@@ -43,3 +46,4 @@ class NetworkHandicap(db.Model):
         self.dns_latency = dns_latency
         self.general_latency = general_latency
         self.packet_loss = packet_loss
+        self.cidr_not = cidr_not

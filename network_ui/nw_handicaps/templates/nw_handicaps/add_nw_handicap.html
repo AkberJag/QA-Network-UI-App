@@ -9,46 +9,66 @@
 
         {{form.nw_handicap_name.label(class="form-label")}}<br>
         <div class="input-group has-validation">
-            {{form.nw_handicap_name(class="form-control", required="required")}}
+            {{form.nw_handicap_name(class="form-control", required="required", placeholder="Good Network")}}
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Please enter a name for the network handicap.</div>
         </div><br>
 
         {{form.bandwidth_restriction_upload.label(class="form-label")}}<br>
         <div class="input-group has-validation">
-            {{form.bandwidth_restriction_upload(class="form-control", type="number", min=0)}}
+            {{form.bandwidth_restriction_upload(class="form-control", type="number", min=0, placeholder="optional")}}
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Stop QA'ing and enter a NUMBER</div>
         </div><br>
 
         {{form.bandwidth_restriction_download.label(class="form-label")}}<br>
         <div class="input-group has-validation">
-            {{form.bandwidth_restriction_download(class="form-control", type="number", min=0)}}
+            {{form.bandwidth_restriction_download(class="form-control", type="number", min=0, placeholder="optional")}}
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Stop QA'ing and enter a NUMBER</div>
         </div><br>
 
         {{form.dns_latency.label(class="form-label")}}<br>
         <div class="input-group has-validation">
-            {{form.dns_latency(class="form-control", type="number", min=0)}}
+            {{form.dns_latency(class="form-control", type="number", min=0, placeholder="optional")}}
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Stop QA'ing and enter a NUMBER</div>
         </div><br>
 
         {{form.general_latency.label(class="form-label")}}<br>
         <div class="input-group has-validation">
-            {{form.general_latency(class="form-control", type="number", min=0)}}
+            {{form.general_latency(class="form-control", type="number", min=0, placeholder="optional")}}
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Stop QA'ing and enter a NUMBER</div>
         </div><br>
 
         {{form.packet_loss.label(class="form-label")}}<br>
         <div class="input-group has-validation">
-            {{form.packet_loss(class="form-control", type="number", min=0, max=100, value=0)}}
+            {{form.packet_loss(class="form-control", type="number", min=0, max=100, value=0, placeholder="default value 0")}}
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Stop QA'ing and enter a NUMBER</div>
         </div><br>
 
+        <div class="form-label">Enter the subnet in CIDR notation eg: 192.168.1.1 <b>/</b> 24</div>
+        <div class="row row-cols-auto">
+            <div class="col">
+                <div class="input-group has-validation">
+                    {{form.cidr_not(class="form-control", placeholder="192.168.1.1 (optional)")}}
+                    <div class="valid-feedback">Looks good!</div>
+                    <div class="invalid-feedback">Stop QA'ing and enter a NUMBER</div>
+                </div>
+            </div>
+            <div class="col">
+                <b>/</b>
+            </div>
+            <div class="col">
+                <div class="input-group has-validation">
+                    {{form.cidr_suffix(class="form-control", type="number", min=0, max=32, placeholder="30 (optional)")}}
+                    <div class="valid-feedback">Looks good!</div>
+                    <div class="invalid-feedback">Enter a valid number between 0 - 32</div>
+                </div>
+            </div>
+        </div><br>
 
 
         {{form.submit(class="btn btn-outline-primary")}}

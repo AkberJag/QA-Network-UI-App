@@ -15,5 +15,6 @@
     "files.associations": {
         "*.html": "jinja-html"
     },
-    "python.linting.enabled": false
+    "python.linting.enabled": false,
+    "html.format.wrapLineLength": 0
 }
