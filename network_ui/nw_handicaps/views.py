@@ -136,7 +136,35 @@ def update(id):
         handicap_to_update.general_latency = form.general_latency.data
 
         handicap_to_update.packet_loss = form.packet_loss.data
-        # TODO: Add logic to limit the value between 0 - 100
+
+        cidr_notation = None
+
+        if form.cidr_not_ip.data and form.cidr_suffix.data:
+            if validate_ip_address(form.cidr_not_ip.data):
+                cidr_notation = f"{form.cidr_not_ip.data}/{form.cidr_suffix.data}"
+                print(cidr_notation)
+            else:
+                cidr_notation = None
+                flash(
+                    Markup(
+                        f"the ip address you entered is wrong > '<b>{form.cidr_not_ip.data}</b>'"
+                    ),
+                    "danger",
+                )
+
+                return redirect(url_for("nw_handi.update", id=id))
+
+        elif form.cidr_not_ip.data and not form.cidr_suffix.data:
+
+            flash(
+                Markup(f"Add the suffix {form.cidr_not_ip.data} / <b>----</b>"),
+                "warning",
+            )
+
+            return redirect(url_for("nw_handi.update", id=id))
+
+        handicap_to_update.cidr_not = cidr_notation
+
         db.session.commit()
         flash(
             Markup(f"<b>{handicap_to_update.handicap_name}</b> updated successfully"),
