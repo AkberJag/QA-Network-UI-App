@@ -130,3 +130,9 @@ def delete(id):
         # TODO: Add a script call to remove this IP address from the restriction
 
     return redirect(url_for("index"))
+
+
+@ip_address_blueprint.route("/update/<int:id>", methods=["GET", "POST"])
+def update(id):
+    # TODO: add the fn to move one PC from one template to another
+    return redirect(url_for("index"))
