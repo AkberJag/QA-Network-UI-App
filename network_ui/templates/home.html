@@ -20,14 +20,14 @@
             {% for _, template_items in templates.items() %}
             <div class="card-header">
                 {# template name #}
-                <h2 style="display: inline-block" data-bs-container="body" data-bs-trigger="hover"
-                    data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="
+                <h2 style="display: inline-block" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="
                     <b>Bandwidth</b> Up: {{template_items['template'].bandwidth_restriction_upload}} / Down: {{template_items['template'].bandwidth_restriction_download}}<br>
                     <b>DNS Latency:</b> {{template_items['template'].dns_latency}}<br>
                     <b>General Latency: </b> {{template_items['template'].general_latency}}<br>
-                    <b>Packet Loss: </b>{{template_items['template'].packet_loss}}%">
-                    {{template_items['template'].handicap_name}}<sup id="emoji-{{loop.index}}"
-                        style="vertical-align: super; font-size: small"></sup></h2>
+                    <b>Packet Loss: </b>{{template_items['template'].packet_loss}}%<br>
+                    {% if template_items['template'].cidr_not %}<b>SubNet Mask: </b> {{template_items['template'].cidr_not }} {% endif %}
+                    ">
+                    {{template_items['template'].handicap_name}}<sup id="emoji-{{loop.index}}" style="vertical-align: super; font-size: small"></sup></h2>
                 <script> document.getElementById("emoji-{{loop.index}}").innerHTML = getRandomEmoji()</script>
             </div>
             <table class="table table-bordered">
@@ -46,19 +46,16 @@
                         <th scope="row">{{loop.index}}</th>
                         <td>{{template_item[0].pc_name}}</td>
                         <td>{{template_item[0].ip_address}}</td>
-                        <td><button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                data-bs-target="#deleteIPConfirm">Delete</button>
+                        <td><button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteIPConfirm">Delete</button>
                             <!-- Modal -->
-                            <div class="modal fade" id="deleteIPConfirm" tabindex="-1"
-                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="deleteIPConfirm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h1 class="modal-title fs-5" id="exampleModalLabel">Delete
                                                 <b>{{template_item[0].pc_name}}?</b>
                                             </h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             These are the configured values:
@@ -75,10 +72,8 @@
                                             </p>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <a href="{{ url_for('ipaddresses.delete', id=template_item[0].id) }}"
-                                                type="button" class="btn btn-danger">Delete, I fear no
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <a href="{{ url_for('ipaddresses.delete', id=template_item[0].id) }}" type="button" class="btn btn-danger">Delete, I fear no
                                                 man</a>
                                         </div>
                                     </div>
@@ -87,8 +82,7 @@
                         </td>
 
                         {# old button without delete confirmation #}
-                        {# <td><a href="{{ url_for('ipaddresses.delete', id=template_item[0].id) }}" type="button"
-                                class="btn btn-outline-danger">delete</a><br></td> #}
+                        {# <td><a href="{{ url_for('ipaddresses.delete', id=template_item[0].id) }}" type="button" class="btn btn-outline-danger">delete</a><br></td> #}
                     </tr>
                     {% endfor %}
                 </tbody>
