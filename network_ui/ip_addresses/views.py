@@ -1,11 +1,11 @@
 import subprocess
 from network_ui import db
-from network_ui.ip_addresses.models import IPAddress
-from network_ui.ip_addresses.forms import AddForm, DeleteForm
-from network_ui.nw_handicaps.models import NetworkHandicap
-from flask import Blueprint, render_template, url_for, redirect, flash
 from markupsafe import Markup
+from network_ui.ip_addresses.forms import AddForm
+from network_ui.ip_addresses.models import IPAddress
+from network_ui.nw_handicaps.models import NetworkHandicap
 from network_ui.helpers.helpers_common import validate_ip_address
+from flask import Blueprint, render_template, url_for, redirect, flash
 
 ip_address_blueprint = Blueprint(
     "ipaddresses", __name__, template_folder="templates/ip_addresses/"
@@ -20,6 +20,11 @@ is_a_scrip_running = False
 @ip_address_blueprint.route("/add", methods=["GET", "POST"])
 def add():
     global is_a_scrip_running
+
+    handicaps_and_subnets = NetworkHandicap.query.with_entities(
+        NetworkHandicap.handicap_name, NetworkHandicap.cidr_not
+    )
+    subnets = {key: val for key, val in handicaps_and_subnets}
 
     form = AddForm()
     form.network_handicap.choices = [
@@ -92,7 +97,7 @@ def add():
         flash("Add a Network Profile first to add an ip address", "warning")
         return redirect(url_for("nw_handi.add"))
 
-    return render_template("add_ip_address.html", form=form)
+    return render_template("add_ip_address.html", form=form, subnets=subnets)
 
 
 @ip_address_blueprint.route("/delete/<int:id>", methods=["GET", "POST"])
