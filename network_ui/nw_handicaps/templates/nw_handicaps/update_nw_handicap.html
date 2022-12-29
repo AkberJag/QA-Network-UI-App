@@ -54,6 +54,27 @@
             <div class="invalid-feedback">Stop QA'ing and enter a NUMBER</div>
         </div><br>
 
+        <div class="form-label">Enter the subnet in CIDR notation eg: 192.168.1.1 <b>/</b> 24</div>
+        <div class="row row-cols-auto">
+            <div class="col">
+                <div class="input-group has-validation">
+                    {{form.cidr_not_ip(class="form-control", placeholder="192.168.1.1 (optional)", value=handicap_to_update.cidr_not.split('/')[0])}}
+                    <div class="valid-feedback">Looks good!</div>
+                    <div class="invalid-feedback">Stop QA'ing and enter a NUMBER</div>
+                </div>
+            </div>
+            <div class="col">
+                <b>/</b>
+            </div>
+            <div class="col">
+                <div class="input-group has-validation">
+                    {{form.cidr_suffix(class="form-control", type="number", min=0, max=32, placeholder="30 (optional)", value=handicap_to_update.cidr_not.split('/')[1])}}
+                    <div class="valid-feedback">Looks good!</div>
+                    <div class="invalid-feedback">Enter a valid number between 0 - 32</div>
+                </div>
+            </div>
+        </div><br>
+
         {{form.submit(class="btn btn-outline-primary", value="Update" )}}
 
         <a class="btn btn-outline-secondary" href="{{ url_for('nw_handi.list')}}">Cancel</a>
