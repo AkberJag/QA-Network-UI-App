@@ -1,10 +1,11 @@
-import re, subprocess
+import subprocess
 from network_ui import db
 from network_ui.ip_addresses.models import IPAddress
 from network_ui.ip_addresses.forms import AddForm, DeleteForm
 from network_ui.nw_handicaps.models import NetworkHandicap
 from flask import Blueprint, render_template, url_for, redirect, flash
 from markupsafe import Markup
+from network_ui.helpers.helpers_common import validate_ip_address
 
 ip_address_blueprint = Blueprint(
     "ipaddresses", __name__, template_folder="templates/ip_addresses/"
@@ -51,10 +52,7 @@ def add():
             )
             return redirect(url_for("ipaddresses.add"))
 
-        # validate the ip addess with re
-        # https://www.geeksforgeeks.org/python-program-to-validate-an-ip-address/
-        regex = "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$"
-        if re.search(regex, ip_address):
+        if validate_ip_address(ip_address):
 
             # run the script with subprocess and if it is succesful, add the details to DB
             is_a_scrip_running = True
@@ -87,7 +85,6 @@ def add():
             flash(Markup(f"IP address added successfully"), "success")
             return redirect(url_for("index"))
         else:
-            # TODO: send a flash to the user and dont save the IP
             flash(Markup(f"{ip_address} is not a valid IP address"), "danger")
 
     # if the network handicap is empty, ask the user to add one first before adding an ip

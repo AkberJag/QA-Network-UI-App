@@ -20,7 +20,7 @@ class AddForm(FlaskForm):
 
     packet_loss = FloatField("Packet Loss %:", validators=[InputRequired()])
 
-    cidr_not = StringField("Enter the IP address: ", validators=[Optional()])
+    cidr_not_ip = StringField("Enter the IP address: ", validators=[Optional()])
     cidr_suffix = StringField("Enter the suffix: ", validators=[Optional()])
 
     submit = SubmitField("Add handicap template")

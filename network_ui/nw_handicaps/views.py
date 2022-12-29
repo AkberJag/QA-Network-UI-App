@@ -3,7 +3,7 @@ from network_ui.nw_handicaps.forms import AddForm
 from network_ui.nw_handicaps.models import NetworkHandicap
 from flask import Blueprint, render_template, url_for, redirect, flash, request
 from markupsafe import Markup
-
+from network_ui.helpers.helpers_common import validate_ip_address
 
 nw_handicap_blueprint = Blueprint(
     "nw_handi", __name__, template_folder="templates/nw_handicaps/"
@@ -24,13 +24,26 @@ def add():
 
         packet_loss = form.packet_loss.data
 
-        if form.cidr_not.data and form.cidr_suffix.data:
-            cidr_notation = f"{form.cidr_not.data}/{form.cidr_suffix.data}"
-            print(cidr_notation)
-        elif form.cidr_not.data and not form.cidr_suffix.data:
+        if form.cidr_not_ip.data and form.cidr_suffix.data:
+            if validate_ip_address(form.cidr_not_ip.data):
+                cidr_notation = f"{form.cidr_not_ip.data}/{form.cidr_suffix.data}"
+                print(cidr_notation)
+            else:
+                cidr_notation = None
+                flash(
+                    Markup(
+                        f"the ip address you entered is wrong > '<b>{form.cidr_not_ip.data}</b>'"
+                    ),
+                    "danger",
+                )
+
+                return redirect(url_for("nw_handi.add"))
+
+        elif form.cidr_not_ip.data and not form.cidr_suffix.data:
             cidr_notation = None
             flash(
-                Markup(f"Add the suffix {form.cidr_not.data} / <b>----</b>"), "warning"
+                Markup(f"Add the suffix {form.cidr_not_ip.data} / <b>----</b>"),
+                "warning",
             )
 
             return redirect(url_for("nw_handi.add"))
@@ -38,7 +51,7 @@ def add():
             cidr_notation = None
             flash(
                 Markup(
-                    f"the subnet mask you entered is wrong > '<b>{form.cidr_not.data}/{form.cidr_suffix.data}</b>'"
+                    f"the subnet mask you entered is wrong > '<b>{form.cidr_not_ip.data}/{form.cidr_suffix.data}</b>'"
                 ),
                 "danger",
             )
