@@ -34,7 +34,16 @@ def add():
             )
 
             return redirect(url_for("nw_handi.add"))
-        # TODO: Add logic to limit the value between 0 - 100
+        else:
+            cidr_notation = None
+            flash(
+                Markup(
+                    f"the subnet mask you entered is wrong > '<b>{form.cidr_not.data}/{form.cidr_suffix.data}</b>'"
+                ),
+                "danger",
+            )
+
+            return redirect(url_for("nw_handi.add"))
 
         # check the Handicap name is already existing on DB
         if NetworkHandicap.query.filter_by(handicap_name=handicap_name).first() != None:
