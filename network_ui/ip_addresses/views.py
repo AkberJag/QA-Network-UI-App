@@ -4,8 +4,12 @@ from markupsafe import Markup
 from network_ui.ip_addresses.forms import AddForm
 from network_ui.ip_addresses.models import IPAddress
 from network_ui.nw_handicaps.models import NetworkHandicap
-from network_ui.helpers.helpers_common import validate_ip_address
 from flask import Blueprint, render_template, url_for, redirect, flash
+from network_ui.helpers.helpers_common import (
+    validate_ip_address,
+    ip_mask_calculations,
+    check_ip_belongs_subnet,
+)
 
 ip_address_blueprint = Blueprint(
     "ipaddresses", __name__, template_folder="templates/ip_addresses/"
@@ -21,12 +25,17 @@ is_a_scrip_running = False
 def add():
     global is_a_scrip_running
 
+    form = AddForm()
+
     handicaps_and_subnets = NetworkHandicap.query.with_entities(
         NetworkHandicap.handicap_name, NetworkHandicap.cidr_not
     )
-    subnets = {key: val for key, val in handicaps_and_subnets}
+    subnets = {
+        handicap_name: ip_mask_calculations(cidr_not)["limit"]
+        for handicap_name, cidr_not in handicaps_and_subnets
+        if cidr_not
+    }
 
-    form = AddForm()
     form.network_handicap.choices = [
         (g.id, g.handicap_name) for g in NetworkHandicap.query.all()
     ]
@@ -57,7 +66,11 @@ def add():
             )
             return redirect(url_for("ipaddresses.add"))
 
-        if validate_ip_address(ip_address):
+        # Check the IP addr is a valid one or not
+        # if valid continue saving it
+        if validate_ip_address(ip_address) and check_ip_belongs_subnet(
+            ip_address, NetworkHandicap.query.get(network_handicap).cidr_not
+        ):
 
             # run the script with subprocess and if it is succesful, add the details to DB
             is_a_scrip_running = True
