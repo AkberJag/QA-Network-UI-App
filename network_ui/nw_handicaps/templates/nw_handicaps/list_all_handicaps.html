@@ -23,10 +23,12 @@
             <tbody>
                 {% for nw_handicap in nw_handicaps %}
                 <tr>
-
-                    {# if handicap_to_update.handicap_name is not None #}
                     <th scope="row">{{loop.index}}</th>
-                    <td>{{nw_handicap.handicap_name}}</td>
+                    <td><b>{{nw_handicap.handicap_name}}</b><br>
+                        {% if nw_handicap.cidr_not %}
+                        <div style="font-size: small;">{{nw_handicap.cidr_not}}</div>
+                        {% endif %}
+                    </td>
                     <td>{{nw_handicap.bandwidth_restriction_upload ~ ' MB, ' if nw_handicap.bandwidth_restriction_upload
                         is not none else '--,'}} {{nw_handicap.bandwidth_restriction_download ~ ' MB, ' if
                         nw_handicap.bandwidth_restriction_download is not none else '--'}}
@@ -37,21 +39,18 @@
                     <td>{{nw_handicap.no_of_pcs}}</td>
                     <td>
                         <div style="width: max-content;">
-                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                data-bs-target="#deleteTemplateConfirm{{nw_handicap.id}}">
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteTemplateConfirm{{nw_handicap.id}}">
                                 Delete
                             </button>
                             <!-- Modal -->
-                            <div class="modal fade" id="deleteTemplateConfirm{{nw_handicap.id}}" tabindex="-1"
-                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="deleteTemplateConfirm{{nw_handicap.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h1 class="modal-title fs-5" id="exampleModalLabel">Delete
                                                 <b>{{nw_handicap.handicap_name}}?</b>
                                             </h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             Are you sure you wanted to delete "{{nw_handicap.handicap_name}}?"
@@ -63,22 +62,18 @@
                                             {% endif %}
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <a href="{{ url_for('nw_handi.delete', id=nw_handicap.id) }}" type="button"
-                                                class="btn btn-danger">Delete, I fear no
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <a href="{{ url_for('nw_handi.delete', id=nw_handicap.id) }}" type="button" class="btn btn-danger">Delete, I fear no
                                                 man</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <a class="btn btn-outline-warning"
-                                href="{{ url_for('nw_handi.update', id=nw_handicap.id) }}">Edit</a>
+                            <a class="btn btn-outline-warning" href="{{ url_for('nw_handi.update', id=nw_handicap.id) }}">Edit</a>
                         </div>
                     </td>
                     {# old button without confirmation #}
-                    {# <td><a href="{{ url_for('nw_handi.delete', id=nw_handicap.id) }}" type="button"
-                            class="btn btn-outline-danger">delete</a><br></td> #}
+                    {# <td><a href="{{ url_for('nw_handi.delete', id=nw_handicap.id) }}" type="button" class="btn btn-outline-danger">delete</a><br></td> #}
                 </tr>
 
                 {% endfor%}
