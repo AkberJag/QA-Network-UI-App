@@ -6,7 +6,6 @@ from network_ui.nw_handicaps.models import NetworkHandicap
 
 @app.route("/")
 def index():
-    ip_addresses = IPAddress.query.all()
     all_templates = NetworkHandicap.query.all()
 
     templates = {}
