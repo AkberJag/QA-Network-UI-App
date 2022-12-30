@@ -1,7 +1,7 @@
 import re, ipaddress
 
 
-def validate_ip_address(ip_address):
+def validate_ip_address(ip_address) -> bool:
     # validate the ip addess with re
     # https://www.geeksforgeeks.org/python-program-to-validate-an-ip-address/
     regex = "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$"
@@ -33,3 +33,4 @@ def ip_mask_calculations(ip):
 def check_ip_belongs_subnet(ip, nw):
     if ip and nw:
         return ipaddress.ip_address(ip) in ipaddress.ip_network(nw, False)
+    return False

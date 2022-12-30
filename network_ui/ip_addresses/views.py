@@ -66,12 +66,22 @@ def add():
             )
             return redirect(url_for("ipaddresses.add"))
 
+        selected_nw_handicap = NetworkHandicap.query.get(network_handicap)
+
         # Check the IP addr is a valid one or not
         # if valid continue saving it
-        if validate_ip_address(ip_address) and check_ip_belongs_subnet(
-            ip_address, NetworkHandicap.query.get(network_handicap).cidr_not
-        ):
-
+        if validate_ip_address(ip_address):
+            if selected_nw_handicap.cidr_not is not None:
+                if not check_ip_belongs_subnet(
+                    ip_address, selected_nw_handicap.cidr_not
+                ):
+                    flash(
+                        Markup(
+                            f"'{ip_address}' is not belong to the proper Sub Net of '{selected_nw_handicap.handicap_name}'"
+                        ),
+                        "danger",
+                    )
+                    return redirect(url_for("ipaddresses.add"))
             # run the script with subprocess and if it is succesful, add the details to DB
             is_a_scrip_running = True
 
@@ -102,6 +112,7 @@ def add():
 
             flash(Markup(f"IP address added successfully"), "success")
             return redirect(url_for("index"))
+
         else:
             flash(Markup(f"{ip_address} is not a valid IP address"), "danger")
 
