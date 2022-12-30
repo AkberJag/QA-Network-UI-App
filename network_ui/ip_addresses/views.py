@@ -162,7 +162,7 @@ def update(id):
     form.network_handicap.choices = [
         (g.id, g.handicap_name) for g in NetworkHandicap.query.all()
     ]
-    print(form.network_handicap.choices)
+
     # form.network_handicap.choices.pop(form.network_handicap.data)
 
     ip_addr_to_update = IPAddress.query.get_or_404(id)
