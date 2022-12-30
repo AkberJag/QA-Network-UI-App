@@ -121,7 +121,7 @@ def add():
         flash("Add a Network Profile first to add an ip address", "warning")
         return redirect(url_for("nw_handi.add"))
 
-    return render_template("update_ip_address.html", form=form, subnets=subnets)
+    return render_template("add_ip_address.html", form=form, subnets=subnets)
 
 
 @ip_address_blueprint.route("/delete/<int:id>", methods=["GET", "POST"])
@@ -162,6 +162,8 @@ def update(id):
     form.network_handicap.choices = [
         (g.id, g.handicap_name) for g in NetworkHandicap.query.all()
     ]
+    print(form.network_handicap.choices)
+    # form.network_handicap.choices.pop(form.network_handicap.data)
 
     ip_addr_to_update = IPAddress.query.get_or_404(id)
     current_nw_profile = ip_addr_to_update.network_handicap
@@ -177,16 +179,24 @@ def update(id):
         updated_network_handicap = form.network_handicap.data
 
         # check the updated PC name is already existing on DB
-        if IPAddress.query.filter_by(pc_name=updated_pc_name).first() != None:
+        if (
+            IPAddress.query.filter_by(pc_name=updated_pc_name).first() != None
+            and ip_addr_to_update.pc_name != updated_pc_name
+        ):
             flash(
                 Markup(f"This PC name <b>{updated_pc_name}</b> is already in use"),
                 "danger",
             )
             return redirect(url_for("ipaddresses.update", id=id))
         # check the updated IP Address is already existing on DB
-        if IPAddress.query.filter_by(ip_address=updated_ip_address).first() != None:
+        if (
+            IPAddress.query.filter_by(ip_address=updated_ip_address).first() != None
+            and ip_addr_to_update.ip_address != updated_ip_address
+        ):
             flash(
-                Markup(f"This IP address <b>{updated_pc_name}</b> is already in use"),
+                Markup(
+                    f"This IP address <b>{updated_ip_address}</b> is already in use"
+                ),
                 "danger",
             )
             return redirect(url_for("ipaddresses.update", id=id))
@@ -225,16 +235,16 @@ def update(id):
             if str(script_call) == "0":
                 is_a_scrip_running = False
 
+            ip_addr_to_update.pc_name = updated_pc_name
+            ip_addr_to_update.ip_address = updated_ip_address
+            ip_addr_to_update.network_handicap = updated_network_handicap
+
             # Increment the total number PCs configured in this template by 1
             # Please see the question on nw_handicaps > models.py
             NetworkHandicap.query.get(int(updated_network_handicap)).no_of_pcs = (
                 NetworkHandicap.query.get(int(updated_network_handicap)).no_of_pcs + 1
             )
 
-            new_ip_address = IPAddress(
-                updated_pc_name, updated_ip_address, updated_network_handicap
-            )
-            db.session.add(new_ip_address)
             db.session.commit()
 
             flash(Markup(f"IP address added successfully"), "success")
@@ -248,4 +258,9 @@ def update(id):
         flash("Add a Network Profile first to add an ip address", "warning")
         return redirect(url_for("nw_handi.update", id=id))
 
-    return render_template("update_ip_address.html", form=form, subnets=subnets)
+    return render_template(
+        "update_ip_address.html",
+        form=form,
+        subnets=subnets,
+        ip_addr_to_update=ip_addr_to_update,
+    )
