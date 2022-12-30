@@ -104,7 +104,6 @@ def update(id):
     form = AddForm()
 
     handicap_to_update = NetworkHandicap.query.get_or_404(id)
-    print(handicap_to_update)
 
     if form.validate_on_submit():
 
