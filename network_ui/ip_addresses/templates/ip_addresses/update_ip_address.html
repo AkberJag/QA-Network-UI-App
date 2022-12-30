@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h3>Add a new IP address</h3>
+<h3>Update "{{ip_addr_to_update.pc_name}}"</h3>
 
 <form method="POST" novalidate class="needs-validation">
     {{form.hidden_tag()}}
@@ -25,7 +25,8 @@
     {{form.network_handicap.label(class="form-label")}}
     {{form.network_handicap(class="btn btn-secondary dropdown-toggle", id="ipDrop")}}<br>
 
-    {{form.submit(class="btn btn-outline-primary")}}
+    {{form.submit(class="btn btn-outline-primary", value="Update")}}
+    <a class="btn btn-outline-secondary" href="{{ url_for('index')}}">Cancel</a>
 </form>
 
 
