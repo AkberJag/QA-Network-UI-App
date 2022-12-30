@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>Add a new IP address</h3>
+
+<form method="POST" novalidate class="needs-validation">
+    {{form.hidden_tag()}}
+
+    {{form.pc_name.label(class="form-label")}}<br>
+    <div class="input-group has-validation">
+        {{form.pc_name(class="form-control", required="required")}}
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please enter a name for your device.</div>
+    </div>
+    <br>
+
+    {{form.ip_address.label(class="form-label", id="ip_address_label")}}<br>
+    <div class="input-group has-validation">
+        {{form.ip_address(class="form-control", required="required")}}
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Stop QA'ing and enter an IP adderss</div>
+    </div>
+    <br>
+
+    {{form.network_handicap.label(class="form-label")}}
+    {{form.network_handicap(class="btn btn-secondary dropdown-toggle", id="ipDrop")}}<br>
+
+    {{form.submit(class="btn btn-outline-primary")}}
+</form>
+
+
+
+
+<script>
+
+    // JavaScript for disabling form submissions if there are invalid fields
+    (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+
+    // to detect the dropdown change and show the subnet details
+    var e = document.getElementById("ipDrop");
+    var val = JSON.parse('{{subnets|tojson}}');
+    function onChange() {
+        var text = e.options[e.selectedIndex].text;
+        if (val[text]) {
+            document.getElementById("ip_address_label").innerHTML = `Enter IP Address in this range <b>${val[text]}</b> (because a subnetmask is enabled for the selected profile)`
+        }
+        else {
+            document.getElementById("ip_address_label").innerHTML = "Enter IP Address:"
+        }
+    }
+    e.onchange = onChange;
+    onChange();
+</script>
+
+{% endblock content %}

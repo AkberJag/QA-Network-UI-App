@@ -121,7 +121,7 @@ def add():
         flash("Add a Network Profile first to add an ip address", "warning")
         return redirect(url_for("nw_handi.add"))
 
-    return render_template("add_ip_address.html", form=form, subnets=subnets)
+    return render_template("update_ip_address.html", form=form, subnets=subnets)
 
 
 @ip_address_blueprint.route("/delete/<int:id>", methods=["GET", "POST"])
@@ -145,5 +145,107 @@ def delete(id):
 
 @ip_address_blueprint.route("/update/<int:id>", methods=["GET", "POST"])
 def update(id):
-    # TODO: add the fn to move one PC from one template to another
-    return redirect(url_for("index"))
+    global is_a_scrip_running
+
+    form = AddForm()
+
+    handicaps_and_subnets = NetworkHandicap.query.with_entities(
+        NetworkHandicap.handicap_name, NetworkHandicap.cidr_not
+    )
+
+    subnets = {
+        handicap_name: ip_mask_calculations(cidr_not)["limit"]
+        for handicap_name, cidr_not in handicaps_and_subnets
+        if cidr_not
+    }
+
+    form.network_handicap.choices = [
+        (g.id, g.handicap_name) for g in NetworkHandicap.query.all()
+    ]
+
+    ip_addr_to_update = IPAddress.query.get_or_404(id)
+    current_nw_profile = ip_addr_to_update.network_handicap
+
+    # if a script is running already take the user to the homescreen and show a flash
+    if is_a_scrip_running:
+        flash("a script is running please wait before adding a new one", "danger")
+        return redirect(url_for("index"))
+
+    if form.validate_on_submit():
+        updated_pc_name = form.pc_name.data
+        updated_ip_address = form.ip_address.data
+        updated_network_handicap = form.network_handicap.data
+
+        # check the updated PC name is already existing on DB
+        if IPAddress.query.filter_by(pc_name=updated_pc_name).first() != None:
+            flash(
+                Markup(f"This PC name <b>{updated_pc_name}</b> is already in use"),
+                "danger",
+            )
+            return redirect(url_for("ipaddresses.update", id=id))
+        # check the updated IP Address is already existing on DB
+        if IPAddress.query.filter_by(ip_address=updated_ip_address).first() != None:
+            flash(
+                Markup(f"This IP address <b>{updated_pc_name}</b> is already in use"),
+                "danger",
+            )
+            return redirect(url_for("ipaddresses.update", id=id))
+
+        selected_nw_handicap = NetworkHandicap.query.get(updated_network_handicap)
+
+        # Check the IP addr is a valid one or not
+        # if valid continue saving it
+        if validate_ip_address(updated_ip_address):
+            if selected_nw_handicap.cidr_not is not None:
+                if not check_ip_belongs_subnet(
+                    updated_ip_address, selected_nw_handicap.cidr_not
+                ):
+                    flash(
+                        Markup(
+                            f"'{updated_ip_address}' is not belong to the proper Sub Net of '{selected_nw_handicap.handicap_name}'"
+                        ),
+                        "danger",
+                    )
+                    return redirect(url_for("ipaddresses.update", id=id))
+            # run the script with subprocess and if it is succesful, add the details to DB
+            is_a_scrip_running = True
+
+            # commenting to test this on windows
+            # script_call = subprocess.call(
+            #     [
+            #         "bash",
+            #         "network_ui/shell_scripts/temp.sh",
+            #         str(ip_address),
+            #         str(network_handicap),
+            #     ]
+            # )
+
+            script_call = 0
+
+            if str(script_call) == "0":
+                is_a_scrip_running = False
+
+            # Increment the total number PCs configured in this template by 1
+            # Please see the question on nw_handicaps > models.py
+            NetworkHandicap.query.get(int(updated_network_handicap)).no_of_pcs = (
+                NetworkHandicap.query.get(int(updated_network_handicap)).no_of_pcs + 1
+            )
+
+            new_ip_address = IPAddress(
+                updated_pc_name, updated_ip_address, updated_network_handicap
+            )
+            db.session.add(new_ip_address)
+            db.session.commit()
+
+            flash(Markup(f"IP address added successfully"), "success")
+            return redirect(url_for("index"))
+
+        else:
+            flash(Markup(f"{updated_ip_address} is not a valid IP address"), "danger")
+
+    # if the network handicap is empty, ask the user to add one first before adding an ip
+    if NetworkHandicap.query.all() == []:
+        flash("Add a Network Profile first to add an ip address", "warning")
+        return redirect(url_for("nw_handi.update", id=id))
+
+    return render_template("update_ip_address.html", form=form, subnets=subnets)
